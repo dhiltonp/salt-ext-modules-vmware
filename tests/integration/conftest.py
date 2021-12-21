@@ -2,10 +2,8 @@
 # SPDX-License-Identifier: Apache-2.0
 import json
 import os
-import ssl
 import uuid
 from collections import namedtuple
-from configparser import ConfigParser
 from pathlib import Path
 
 import pytest
@@ -54,7 +52,7 @@ def salt_call_cli(minion):
 
 @pytest.fixture(scope="session")
 def integration_test_config():
-    default_path = Path().parent.parent / "local" / "vcenter.conf"
+    default_path = Path(__file__).parent.parent.parent / "local" / "vcenter.conf"
     config_path = Path(os.environ.get("VCENTER_CONFIG", default_path))
 
     try:
