@@ -210,7 +210,7 @@ def get_mors_with_properties(
         ``Traverse All`` spec
 
     local_properties
-        Flag specigying whether the properties to be retrieved are local to the
+        Flag specifying whether the properties to be retrieved are local to the
         container. If that is the case, the traversal spec needs to be None.
     """
     # Get all the content
@@ -729,17 +729,19 @@ def get_vm_datacenter(*, vm):
     return datacenter
 
 
-def get_mors_type(obj, type):
+def get_parent_of_type(mors, type):
     """
-    Return a vim type from managed object reference
+    Finds the first parent of a managed object that matches the type specified.
+
+    `None` is returned if no object is found.
     """
-    datacenter = None
+    result = None
     while True:
-        if isinstance(obj, type):
-            datacenter = obj
+        if isinstance(mors, type):
+            result = mors
             break
         try:
-            obj = obj.parent
+            mors = mors.parent
         except AttributeError:
             break
-    return datacenter
+    return result
