@@ -618,7 +618,7 @@ def get_clusters(service_instance, datacenter_name=None, cluster_name=None):
         (Optional) Exact cluster name to filter by. Requires datacenter_name.
     """
     if datacenter_name is None and cluster_name:
-        raise salt.exceptions.SaltInvocationError("datacenter_name is required when looking up by cluster_name")
+        raise salt.exceptions.ArgumentValueError("datacenter_name is required when looking up by cluster_name")
 
     clusters = []
     for cluster in get_mors_with_properties(
@@ -646,16 +646,16 @@ def get_cluster(service_instance, datacenter_name, cluster_name):
     cluster_name
         The cluster name
     """
-    if not (cluster_name and datacenter_name):
-        raise salt.exceptions.SaltInvocationError("Both datacenter_name and cluster_name are required when looking up a cluster")
+    if not cluster_name:
+        raise salt.exceptions.ArgumentValueError("Datacenter_name and cluster_name are required when looking up a cluster")
     clusters = get_clusters(service_instance, datacenter_name, cluster_name)
     if len(clusters) == 0:
         return None
     elif len(clusters) == 1:
         return clusters[0]
     else:
-        raise Exception()  # cluster_name and datacenter_name should not be none and produce a unique match...
-
+        # this should be unreachable; if hit, it indicates a bug in this function
+        raise Exception()
 
 
 def get_datacenters(service_instance, datacenter_names=None, get_all_datacenters=False):
